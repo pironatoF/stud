@@ -8,6 +8,8 @@ from security import authenticate, identity as identity_function
 from resources.user import UserRegister
 from resources.item import Item, ItemList
 from resources.store import Store, StoreList
+import os
+
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///data.db'  # root folder
@@ -55,4 +57,7 @@ api.add_resource(Store, '/store/<string:name>')
 api.add_resource(StoreList, '/stores')
 
 if __name__ == "__main__":
-    app.run(port=5000, debug=True)
+    try:
+        app.run(port=5000, debug=True)
+    except TimeoutError:
+        app.run(port=os.environ['PORT'])
