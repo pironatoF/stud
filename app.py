@@ -64,4 +64,4 @@ if __name__ == "__main__":
         app.run(port=os.environ['PORT'])
 """
 port = int(os.getenv('PORT'))
-app.run(port=30395)
+app.run(port=port)
