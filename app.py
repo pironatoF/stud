@@ -56,8 +56,11 @@ api.add_resource(UserRegister, '/register')
 api.add_resource(Store, '/store/<string:name>')
 api.add_resource(StoreList, '/stores')
 
+"""
 if __name__ == "__main__":
     try:
         app.run(port=5000, debug=True)
     except TimeoutError:
         app.run(port=os.environ['PORT'])
+"""
+app.run(port=os.environ['PORT'])
