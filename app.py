@@ -9,11 +9,18 @@ from resources.user import UserRegister
 from resources.item import Item, ItemList
 from resources.store import Store, StoreList
 import os
+import re
 
+# or other relevant config var
+uri = os.getenv("DATABASE_URL", "sqlite:///data.db")
+if uri.startswith("postgres://"):
+    uri = uri.replace("postgres://", "postgresql://", 1)
+# rest of connection code using the connection string `uri`
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///data.db'  # root folder
+# app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///data.db'  # root folder
 # only on flask extension not sqlalchemy
+app.config['SQLALCHEMY_DATABASE_URI'] = uri
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.secret_key = 'test'
 api = Api(app)
@@ -64,5 +71,5 @@ if __name__ == "__main__":
         app.run(port=os.environ['PORT'])
 """
 if __name__ == '__main__':
-    port = int(os.getenv('PORT',5000))
+    port = int(os.getenv('PORT', 5000))
     app.run(port=port)
