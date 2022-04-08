@@ -63,4 +63,5 @@ if __name__ == "__main__":
     except TimeoutError:
         app.run(port=os.environ['PORT'])
 """
-app.run(port=os.environ['PORT'])
+port = int(os.getenv('PORT'))
+app.run(port=port)
