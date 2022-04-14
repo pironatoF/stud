@@ -2,8 +2,8 @@
 Description=uWSGI stud restapi
 
 [Service]
-Environment=DATABASE_URL=postgres://developer:alfabeto@localhost:5432/developer
-ExecStart=/var/www/html/stud/venv/bin/uwsgi  --emperor --master /var/www/html/stud/uwsgi.ini --die-on-term --uid developer --gid developer --logto /var/www/html/stud/log/emperor.log --stats :8081 --stats-http
+Environment=DATABASE_URL=postgres://youruser:yourpass@localhost:5432/youruser
+ExecStart=/yourenv/bin/uwsgi  --emperor --master /base/uwsgi.ini --die-on-term --uid youruser --gid youruser_group --logto /base/log/emperor.log --stats :8081 --stats-http
 Restart=always
 KillSignal=SIGQUIT
 Type=notify
