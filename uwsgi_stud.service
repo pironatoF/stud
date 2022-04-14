@@ -1,0 +1,14 @@
+[Unit]
+Description=uWSGI stud restapi
+
+[Service]
+Environment=DATABASE_URL=postgres://developer:alfabeto@localhost:5432/developer
+ExecStart=/var/www/html/stud/venv/bin/uwsgi  --emperor --master /var/www/html/stud/uwsgi.ini --die-on-term --uid developer --gid developer --logto /var/www/html/stud/log/emperor.log --stats :8081 --stats-http
+Restart=always
+KillSignal=SIGQUIT
+Type=notify
+NotifyAccess=all
+
+
+[Install]
+WantedBy=multi-user.target
