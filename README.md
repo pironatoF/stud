@@ -15,3 +15,5 @@ Suggestion for wrk after compile (openssl required):
 ./wrk -t{int:thread} -c{int:connections} -d{int:seconds}s -R1 {api/resource}
 
 no tox, no coverage ( this project is intended just for test/stud purposes)
+
+![Schermata da 2022-04-14 06-11-38](https://user-images.githubusercontent.com/13415369/163312257-758b77ac-cdb6-48f4-abc5-fc1f2a2fd660.png)
