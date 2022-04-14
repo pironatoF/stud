@@ -1,5 +1,5 @@
 from models.item import ItemModel
-from flask_jwt import jwt_required
+from flask_jwt_extended import jwt_required, get_jwt, get_jwt_identity
 from flask_restful import Resource, reqparse
 from typing import Union, Dict, List, Any, Type
 JsonType = Union[Dict[str, Any], List[Any],
@@ -7,10 +7,18 @@ JsonType = Union[Dict[str, Any], List[Any],
 
 
 class ItemList(Resource):
+
+    @jwt_required(optional=True)
     def get(self) -> JsonType:
-        items = ItemModel.query.all()
+        items = ItemModel.find_all()
+        user_id = get_jwt_identity()
+        items = ItemModel.find_all()
         if items:
-            return {'items': [item.json() for item in items]}, 200
+            if user_id:
+                return {'items': [item.json() for item in items]}, 200
+            return {
+                'items': [item.name for item in items],
+                'message': 'more data available if u re logged'}, 200
         return {'message': 'no items'}, 404
 
 
@@ -34,13 +42,14 @@ class Item(Resource):
         help="This item need a store_id"
     )
 
-    @ jwt_required()
+    @jwt_required()
     def get(self, name: str) -> JsonType:
         item = ItemModel.find_by_name(name)
         if item:
             return {"item": item.json()}, 200
         return {'message': 'Item not found'}, 404
 
+    @jwt_required(fresh=True)
     def post(self, name: str) -> JsonType:
         data = Item.parser.parse_args()
         item = ItemModel.find_by_name(name)
@@ -53,7 +62,11 @@ class Item(Resource):
             return {'message': "An error occurred inserting items"}, 500
         return {"item": new_item.json()}, 201
 
+    @jwt_required()
     def delete(self, name: str) -> JsonType:
+        claims = get_jwt()
+        if not claims.get('is_admin'):
+            return {'message': "Admin required"}, 401
         item = ItemModel.find_by_name(name)
         if item:
             item.delete()

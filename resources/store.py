@@ -1,5 +1,5 @@
 from models.store import StoreModel
-from flask_jwt import jwt_required
+from flask_jwt_extended import jwt_required
 from flask_restful import Resource  # , reqparse
 from typing import Union, Dict, List, Any, Type
 JsonType = Union[Dict[str, Any], List[Any],
@@ -8,7 +8,7 @@ JsonType = Union[Dict[str, Any], List[Any],
 
 class StoreList(Resource):
     def get(self) -> JsonType:
-        stores = StoreModel.query.all()
+        stores = StoreModel.find_all()
         if stores:
             return {'stores': [store.json() for store in stores]}, 200
         return {'message': 'no stores'}, 404
